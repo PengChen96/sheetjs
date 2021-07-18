@@ -1,5 +1,5 @@
 {
-	"name": "xlsx",
+	"name": "@pc/xlsx",
 	"version": "0.17.0",
 	"author": "sheetjs",
 	"description": "SheetJS Spreadsheet data parser and writer",
