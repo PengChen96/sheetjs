@@ -1,3 +1,8 @@
+# About this fork
+Support for the style feature.
+
+
+
 # [SheetJS js-xlsx](http://sheetjs.com)
 
 Parser and writer for various spreadsheet formats.  Pure-JS cleanroom
