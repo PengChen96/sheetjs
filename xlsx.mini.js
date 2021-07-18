@@ -6402,6 +6402,11 @@ var STYLES_XML_ROOT = writextag('styleSheet', null, {
 RELS.STY = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
 
 function write_sty_xml(wb, opts) {
+
+	if (typeof style_builder != 'undefined' && typeof 'require' != 'undefined') {
+		return style_builder.toXml();
+	}
+
 	var o = [XML_HEADER, STYLES_XML_ROOT], w;
 	if(wb.SSF && (w = write_numFmts(wb.SSF)) != null) o[o.length] = w;
 	o[o.length] = ('<fonts count="1"><font><sz val="12"/><color theme="1"/><name val="Calibri"/><family val="2"/><scheme val="minor"/></font></fonts>');
@@ -7064,27 +7069,35 @@ function default_margins(margins, mode) {
 }
 
 function get_cell_style(styles, cell, opts) {
-	var z = opts.revssf[cell.z != null ? cell.z : "General"];
-	var i = 0x3c, len = styles.length;
-	if(z == null && opts.ssf) {
-		for(; i < 0x188; ++i) if(opts.ssf[i] == null) {
-			SSF.load(cell.z, i);
-			// $FlowIgnore
-			opts.ssf[i] = cell.z;
-			opts.revssf[cell.z] = z = i;
-			break;
+	if (typeof style_builder != 'undefined') {
+		if (/^\d+$/.exec(cell.s)) { return cell.s}  // if its already an integer index, let it be
+		if (cell.s && (cell.s == +cell.s)) { return cell.s}  // if its already an integer index, let it be
+		var s = cell.s || {};
+		if (cell.z) s.numFmt = cell.z;
+		return style_builder.addStyle(s);
+	} else {
+		var z = opts.revssf[cell.z != null ? cell.z : "General"];
+		var i = 0x3c, len = styles.length;
+		if(z == null && opts.ssf) {
+			for(; i < 0x188; ++i) if(opts.ssf[i] == null) {
+				SSF.load(cell.z, i);
+				// $FlowIgnore
+				opts.ssf[i] = cell.z;
+				opts.revssf[cell.z] = z = i;
+				break;
+			}
 		}
+		for(i = 0; i != len; ++i) if(styles[i].numFmtId === z) return i;
+		styles[len] = {
+			numFmtId:z,
+			fontId:0,
+			fillId:0,
+			borderId:0,
+			xfId:0,
+			applyNumberFormat:1
+		};
+		return len;
 	}
-	for(i = 0; i != len; ++i) if(styles[i].numFmtId === z) return i;
-	styles[len] = {
-		numFmtId:z,
-		fontId:0,
-		fillId:0,
-		borderId:0,
-		xfId:0,
-		applyNumberFormat:1
-	};
-	return len;
 }
 
 function safe_format(p, fmtid, fillid, opts, themes, styles) {
@@ -9972,6 +9985,7 @@ function write_cfb_ctr(cfb, o) {
 
 function write_zip_type(wb, opts) {
 	var o = opts||{};
+	style_builder  = new StyleBuilder(opts);
 	var z = write_zip(wb, o);
 	var oopts = {};
 	if(o.compression) oopts.compression = 'DEFLATE';
