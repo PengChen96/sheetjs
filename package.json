@@ -1,6 +1,6 @@
 {
-	"name": "@pc/xlsx",
-	"version": "0.0.1",
+	"name": "@pengchen/xlsx",
+	"version": "0.0.1-alpha.1",
 	"author": "sheetjs",
 	"description": "SheetJS Spreadsheet data parser and writer",
 	"keywords": [
@@ -21,6 +21,11 @@
 		"xlsx": "./bin/xlsx.njs"
 	},
 	"main": "./xlsx",
+	"files": [
+		"xlsx.js",
+		"jszip.js",
+		"dist/cpexcel.js"
+	],
 	"unpkg": "dist/xlsx.min.js",
 	"jsdelivr": "dist/xlsx.min.js",
 	"types": "types",
@@ -68,6 +73,7 @@
 		"pretest-only": "git submodule init && git submodule update",
 		"tests-only": "make travis",
 		"build": "make",
+		"build-dist": "make dist",
 		"lint": "make fullint",
 		"dtslint": "dtslint types"
 	},
