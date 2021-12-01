@@ -1,0 +1,17 @@
+Index: package.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n\t\"name\": \"xlsx\",\n\t\"version\": \"0.17.4\",\n\t\"author\": \"sheetjs\",\n\t\"description\": \"SheetJS Spreadsheet data parser and writer\",\n\t\"keywords\": [\n\t\t\"excel\",\n\t\t\"xls\",\n\t\t\"xlsx\",\n\t\t\"xlsb\",\n\t\t\"xlsm\",\n\t\t\"ods\",\n\t\t\"csv\",\n\t\t\"dbf\",\n\t\t\"dif\",\n\t\t\"sylk\",\n\t\t\"office\",\n\t\t\"spreadsheet\"\n\t],\n\t\"bin\": {\n\t\t\"xlsx\": \"./bin/xlsx.njs\"\n\t},\n\t\"main\": \"xlsx.js\",\n\t\"unpkg\": \"dist/xlsx.full.min.js\",\n\t\"jsdelivr\": \"dist/xlsx.full.min.js\",\n\t\"types\": \"types/index.d.ts\",\n\t\"browser\": {\n\t\t\"buffer\": false,\n\t\t\"crypto\": false,\n\t\t\"stream\": false,\n\t\t\"process\": false,\n\t\t\"fs\": false\n\t},\n\t\"dependencies\": {\n\t\t\"adler-32\": \"~1.2.0\",\n\t\t\"cfb\": \"^1.1.4\",\n\t\t\"codepage\": \"~1.15.0\",\n\t\t\"crc-32\": \"~1.2.0\",\n\t\t\"ssf\": \"~0.11.2\",\n\t\t\"wmf\": \"~1.0.1\",\n\t\t\"word\": \"~0.3.0\"\n\t},\n\t\"devDependencies\": {\n\t\t\"@sheetjs/uglify-js\": \"~2.7.3\",\n\t\t\"@types/node\": \"^8.5.9\",\n\t\t\"acorn\": \"7.4.1\",\n\t\t\"alex\": \"^9.1.0\",\n\t\t\"blanket\": \"~1.2.3\",\n\t\t\"commander\": \"~2.17.1\",\n\t\t\"dtslint\": \"^0.1.2\",\n\t\t\"eslint\": \"7.23.0\",\n\t\t\"eslint-plugin-html\": \"^6.1.2\",\n\t\t\"eslint-plugin-json\": \"^2.1.2\",\n\t\t\"exit-on-epipe\": \"~1.0.1\",\n\t\t\"fflate\": \"^0.7.1\",\n\t\t\"jsdom\": \"~11.1.0\",\n\t\t\"markdown-spellcheck\": \"^1.3.1\",\n\t\t\"mocha\": \"~2.5.3\",\n\t\t\"sinon\": \"^1.17.7\",\n\t\t\"typescript\": \"2.2.0\"\n\t},\n\t\"repository\": {\n\t\t\"type\": \"git\",\n\t\t\"url\": \"git://github.com/SheetJS/sheetjs.git\"\n\t},\n\t\"scripts\": {\n\t\t\"pretest\": \"npm run lint\",\n\t\t\"test\": \"npm run tests-only\",\n\t\t\"pretest-only\": \"git submodule init && git submodule update\",\n\t\t\"tests-only\": \"make travis\",\n\t\t\"build\": \"make\",\n\t\t\"lint\": \"make fullint\",\n\t\t\"dtslint\": \"dtslint types\"\n\t},\n\t\"config\": {\n\t\t\"blanket\": {\n\t\t\t\"pattern\": \"xlsx.js\"\n\t\t}\n\t},\n\t\"alex\": {\n\t\t\"allow\": [\n\t\t\t\"chinese\",\n\t\t\t\"special\",\n\t\t\t\"simple\",\n\t\t\t\"just\",\n\t\t\t\"crash\",\n\t\t\t\"wtf\",\n\t\t\t\"holes\"\n\t\t]\n\t},\n\t\"homepage\": \"https://sheetjs.com/\",\n\t\"bugs\": {\n\t\t\"url\": \"https://github.com/SheetJS/sheetjs/issues\"\n\t},\n\t\"license\": \"Apache-2.0\",\n\t\"engines\": {\n\t\t\"node\": \">=0.8\"\n\t}\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- package.json	(revision fcf9182fa628b8c5f6fbf1997a7ad6fcbb695fd1)
++++ package.json	(date 1638345741164)
+@@ -1,6 +1,6 @@
+ {
+ 	"name": "xlsx",
+-	"version": "0.17.4",
++	"version": "0.0.2-alpha.1",
+ 	"author": "sheetjs",
+ 	"description": "SheetJS Spreadsheet data parser and writer",
+ 	"keywords": [

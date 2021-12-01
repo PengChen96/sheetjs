@@ -1,0 +1,12 @@
+Index: bits/01_version.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>XLSX.version = '0.0.1';\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- bits/01_version.js	(revision c516916af173028a07538b5aaa71e81d9a86bc6d)
++++ bits/01_version.js	(date 1638346127483)
+@@ -1,1 +1,1 @@
+-XLSX.version = '0.0.1';
++XLSX.version = '0.0.2';
