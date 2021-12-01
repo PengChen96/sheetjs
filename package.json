@@ -24,7 +24,8 @@
 	"files": [
 		"xlsx.js",
 		"jszip.js",
-		"dist/cpexcel.js"
+		"dist/cpexcel.js",
+		"dist/xlsx.min.js"
 	],
 	"unpkg": "dist/xlsx.min.js",
 	"jsdelivr": "dist/xlsx.min.js",
