@@ -9161,17 +9161,17 @@ module.exports = ZStream;
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.1-alpha.1';
-var current_codepage = 1200, current_ansi = 1252;
-/*global cptable:true, window */
-if(typeof module !== "undefined" && typeof require !== 'undefined') {
-	if(typeof cptable === 'undefined') {
-		if(typeof global !== 'undefined') global.cptable = undefined;
-		else if(typeof window !== 'undefined') window.cptable = undefined;
-	}
-}
+    XLSX.version = '0.0.1';
+    var current_codepage = 1200, current_ansi = 1252;
+    /*global cptable:true, window */
+    if(typeof module !== "undefined" && typeof require !== 'undefined') {
+    if(typeof cptable === 'undefined') {
+    if(typeof global !== 'undefined') global.cptable = undefined;
+    else if(typeof window !== 'undefined') window.cptable = undefined;
+  }
+  }
 
-var VALID_ANSI = [ 874, 932, 936, 949, 950 ];
+    var VALID_ANSI = [ 874, 932, 936, 949, 950 ];
 for(var i = 0; i <= 8; ++i) VALID_ANSI.push(1250 + i);
 /* ECMA-376 Part I 18.4.1 charset to codepage mapping */
 var CS2CP = ({
