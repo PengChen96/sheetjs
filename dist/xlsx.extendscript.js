@@ -9161,7 +9161,7 @@ module.exports = ZStream;
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-    XLSX.version = '0.0.1';
+    XLSX.version = '0.0.3';
     var current_codepage = 1200, current_ansi = 1252;
     /*global cptable:true, window */
     if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -9172,16 +9172,16 @@ function make_xlsx_lib(XLSX){
   }
 
     var VALID_ANSI = [ 874, 932, 936, 949, 950 ];
-for(var i = 0; i <= 8; ++i) VALID_ANSI.push(1250 + i);
-/* ECMA-376 Part I 18.4.1 charset to codepage mapping */
-var CS2CP = ({
-0:    1252, /* ANSI */
-1:   65001, /* DEFAULT */
-2:   65001, /* SYMBOL */
-77:  10000, /* MAC */
-128:   932, /* SHIFTJIS */
-129:   949, /* HANGUL */
-130:  1361, /* JOHAB */
+    for(var i = 0; i <= 8; ++i) VALID_ANSI.push(1250 + i);
+    /* ECMA-376 Part I 18.4.1 charset to codepage mapping */
+    var CS2CP = ({
+    0:    1252, /* ANSI */
+    1:   65001, /* DEFAULT */
+    2:   65001, /* SYMBOL */
+    77:  10000, /* MAC */
+    128:   932, /* SHIFTJIS */
+    129:   949, /* HANGUL */
+    130:  1361, /* JOHAB */
 134:   936, /* GB2312 */
 136:   950, /* CHINESEBIG5 */
 161:  1253, /* GREEK */
