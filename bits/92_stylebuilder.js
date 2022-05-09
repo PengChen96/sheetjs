@@ -35,7 +35,8 @@ var StyleBuilder = function (options) {
     47: 'mmss.0',
     48: '##0.0E+0',
     49: '@',
-    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'    };
+    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'
+  };
   var fmt_table = {};
 
   for (var idx in table_fmt) {
@@ -44,17 +45,17 @@ var StyleBuilder = function (options) {
 
 
   // cache style specs to avoid excessive duplication
-  _hashIndex = {};
-  _listIndex = [];
+  var _hashIndex = {};
+  var _listIndex = [];
 
   return {
 
     initialize: function (options) {
 
-      this.$fonts = XmlNode('fonts').attr('count',0).attr("x14ac:knownFonts","1");
-      this.$fills = XmlNode('fills').attr('count',0);
-      this.$borders = XmlNode('borders').attr('count',0);
-      this.$numFmts = XmlNode('numFmts').attr('count',0);
+      this.$fonts = XmlNode('fonts').attr('count', 0).attr("x14ac:knownFonts", "1");
+      this.$fills = XmlNode('fills').attr('count', 0);
+      this.$borders = XmlNode('borders').attr('count', 0);
+      this.$numFmts = XmlNode('numFmts').attr('count', 0);
       this.$cellStyleXfs = XmlNode('cellStyleXfs');
       this.$xf = XmlNode('xf')
         .attr('numFmtId', 0)

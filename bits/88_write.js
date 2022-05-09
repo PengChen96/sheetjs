@@ -11,18 +11,25 @@ function write_cfb_ctr(cfb/*:CFBContainer*/, o/*:WriteOpts*/)/*:any*/ {
 
 /*:: declare var encrypt_agile:any; */
 function write_zip_type(wb/*:Workbook*/, opts/*:?WriteOpts*/)/*:any*/ {
-	var o = opts||{};
-	style_builder  = new StyleBuilder(opts);
+	var o = opts || {};
+	var style_builder = new StyleBuilder(opts);
 	var z = write_zip(wb, o);
 	var oopts = {};
-	if(o.compression) oopts.compression = 'DEFLATE';
-	if(o.password) oopts.type = has_buf ? "nodebuffer" : "string";
-	else switch(o.type) {
-		case "base64": oopts.type = "base64"; break;
-		case "binary": oopts.type = "string"; break;
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+	if (o.compression) oopts.compression = 'DEFLATE';
+	if (o.password) oopts.type = has_buf ? "nodebuffer" : "string";
+	else switch (o.type) {
+		case "base64":
+			oopts.type = "base64";
+			break;
+		case "binary":
+			oopts.type = "string";
+			break;
+		case "string":
+			throw new Error("'string' output type invalid for '" + o.bookType + "' files");
 		case "buffer":
-		case "file": oopts.type = has_buf ? "nodebuffer" : "string"; break;
+		case "file":
+			oopts.type = has_buf ? "nodebuffer" : "string";
+			break;
 		default: throw new Error("Unrecognized type " + o.type);
 	}
 	var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: /*::(*/{"nodebuffer": "buffer", "string": "binary"}/*:: :any)*/[oopts.type] || oopts.type}) : z.generate(oopts);
