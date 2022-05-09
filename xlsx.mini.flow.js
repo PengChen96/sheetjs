@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.4';
+XLSX.version = '0.0.5';
 var current_codepage = 1200, current_ansi = 1252;
 
 var VALID_ANSI = [ 874, 932, 936, 949, 950 ];
@@ -10084,24 +10084,35 @@ function write_cfb_ctr(cfb/*:CFBContainer*/, o/*:WriteOpts*/)/*:any*/ {
 
 /*:: declare var encrypt_agile:any; */
 function write_zip_type(wb/*:Workbook*/, opts/*:?WriteOpts*/)/*:any*/ {
-	var o = opts||{};
-	style_builder  = new StyleBuilder(opts);
-	var z = write_zip(wb, o);
-	var oopts = {};
-	if(o.compression) oopts.compression = 'DEFLATE';
-	if(o.password) oopts.type = has_buf ? "nodebuffer" : "string";
-	else switch(o.type) {
-		case "base64": oopts.type = "base64"; break;
-		case "binary": oopts.type = "string"; break;
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
-		case "buffer":
-		case "file": oopts.type = has_buf ? "nodebuffer" : "string"; break;
-		default: throw new Error("Unrecognized type " + o.type);
-	}
-	var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: /*::(*/{"nodebuffer": "buffer", "string": "binary"}/*:: :any)*/[oopts.type] || oopts.type}) : z.generate(oopts);
-/*jshint -W083 */
-	if(o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
-/*jshint +W083 */
+  var o = opts || {};
+  var style_builder = new StyleBuilder(opts);
+  var z = write_zip(wb, o);
+  var oopts = {};
+  if (o.compression) oopts.compression = 'DEFLATE';
+  if (o.password) oopts.type = has_buf ? "nodebuffer" : "string";
+  else switch (o.type) {
+    case "base64":
+      oopts.type = "base64";
+      break;
+    case "binary":
+      oopts.type = "string";
+      break;
+    case "string":
+      throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+    case "buffer":
+    case "file":
+      oopts.type = has_buf ? "nodebuffer" : "string";
+      break;
+    default:
+      throw new Error("Unrecognized type " + o.type);
+  }
+  var out = z.FullPaths ? CFB.write(z, {
+    fileType: "zip",
+    type: /*::(*/{"nodebuffer": "buffer", "string": "binary"}/*:: :any)*/[oopts.type] || oopts.type
+  }) : z.generate(oopts);
+  /*jshint -W083 */
+  if (o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
+  /*jshint +W083 */
 	if(o.type === "file") return write_dl(o.file, out);
 	return o.type == "string" ? utf8read(/*::(*/out/*:: :any)*/) : out;
 }

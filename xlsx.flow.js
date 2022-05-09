@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.4';
+XLSX.version = '0.0.5';
 var current_codepage = 1200, current_ansi = 1252;
 /*:: declare var cptable:any; */
 /*global cptable:true, window */
@@ -21195,24 +21195,35 @@ function write_cfb_ctr(cfb/*:CFBContainer*/, o/*:WriteOpts*/)/*:any*/ {
 
 /*:: declare var encrypt_agile:any; */
 function write_zip_type(wb/*:Workbook*/, opts/*:?WriteOpts*/)/*:any*/ {
-	var o = opts||{};
-	style_builder  = new StyleBuilder(opts);
-	var z = write_zip(wb, o);
-	var oopts = {};
-	if(o.compression) oopts.compression = 'DEFLATE';
-	if(o.password) oopts.type = has_buf ? "nodebuffer" : "string";
-	else switch(o.type) {
-		case "base64": oopts.type = "base64"; break;
-		case "binary": oopts.type = "string"; break;
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
-		case "buffer":
-		case "file": oopts.type = has_buf ? "nodebuffer" : "string"; break;
-		default: throw new Error("Unrecognized type " + o.type);
-	}
-	var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: /*::(*/{"nodebuffer": "buffer", "string": "binary"}/*:: :any)*/[oopts.type] || oopts.type}) : z.generate(oopts);
-/*jshint -W083 */
-	if(o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
-/*jshint +W083 */
+  var o = opts || {};
+  var style_builder = new StyleBuilder(opts);
+  var z = write_zip(wb, o);
+  var oopts = {};
+  if (o.compression) oopts.compression = 'DEFLATE';
+  if (o.password) oopts.type = has_buf ? "nodebuffer" : "string";
+  else switch (o.type) {
+    case "base64":
+      oopts.type = "base64";
+      break;
+    case "binary":
+      oopts.type = "string";
+      break;
+    case "string":
+      throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+    case "buffer":
+    case "file":
+      oopts.type = has_buf ? "nodebuffer" : "string";
+      break;
+    default:
+      throw new Error("Unrecognized type " + o.type);
+  }
+  var out = z.FullPaths ? CFB.write(z, {
+    fileType: "zip",
+    type: /*::(*/{"nodebuffer": "buffer", "string": "binary"}/*:: :any)*/[oopts.type] || oopts.type
+  }) : z.generate(oopts);
+  /*jshint -W083 */
+  if (o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
+  /*jshint +W083 */
 	if(o.type === "file") return write_dl(o.file, out);
 	return o.type == "string" ? utf8read(/*::(*/out/*:: :any)*/) : out;
 }
@@ -21731,7 +21742,8 @@ var StyleBuilder = function (options) {
     47: 'mmss.0',
     48: '##0.0E+0',
     49: '@',
-    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'    };
+    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'
+  };
   var fmt_table = {};
 
   for (var idx in table_fmt) {
@@ -21740,17 +21752,17 @@ var StyleBuilder = function (options) {
 
 
   // cache style specs to avoid excessive duplication
-  _hashIndex = {};
-  _listIndex = [];
+  var _hashIndex = {};
+  var _listIndex = [];
 
   return {
 
     initialize: function (options) {
 
-      this.$fonts = XmlNode('fonts').attr('count',0).attr("x14ac:knownFonts","1");
-      this.$fills = XmlNode('fills').attr('count',0);
-      this.$borders = XmlNode('borders').attr('count',0);
-      this.$numFmts = XmlNode('numFmts').attr('count',0);
+      this.$fonts = XmlNode('fonts').attr('count', 0).attr("x14ac:knownFonts", "1");
+      this.$fills = XmlNode('fills').attr('count', 0);
+      this.$borders = XmlNode('borders').attr('count', 0);
+      this.$numFmts = XmlNode('numFmts').attr('count', 0);
       this.$cellStyleXfs = XmlNode('cellStyleXfs');
       this.$xf = XmlNode('xf')
         .attr('numFmtId', 0)
@@ -21758,7 +21770,7 @@ var StyleBuilder = function (options) {
         .attr('fillId', 0)
         .attr('borderId', 0);
 
-      this.$cellXfs = XmlNode('cellXfs').attr('count',0);
+      this.$cellXfs = XmlNode('cellXfs').attr('count', 0);
       this.$cellStyles = XmlNode('cellStyles')
         .append(XmlNode('cellStyle')
           .attr('name', 'Normal')

@@ -9161,7 +9161,7 @@ module.exports = ZStream;
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-    XLSX.version = '0.0.4';
+    XLSX.version = '0.0.5';
     var current_codepage = 1200, current_ansi = 1252;
     /*global cptable:true, window */
     if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -9192,16 +9192,16 @@ function make_xlsx_lib(XLSX){
     186:  1257, /* BALTIC */
     204:  1251, /* RUSSIAN */
     222:   874, /* THAI */
-238:  1250, /* EASTEUROPE */
-255:  1252, /* OEM */
-69:   6969  /* MISC */
-});
+    238:  1250, /* EASTEUROPE */
+    255:  1252, /* OEM */
+    69:   6969  /* MISC */
+  });
 
-var set_ansi = function(cp) { if(VALID_ANSI.indexOf(cp) == -1) return; current_ansi = CS2CP[0] = cp; };
-function reset_ansi() { set_ansi(1252); }
+    var set_ansi = function(cp) {if(VALID_ANSI.indexOf(cp) == -1) return; current_ansi = CS2CP[0] = cp;};
+    function reset_ansi() {set_ansi(1252);}
 
-var set_cp = function(cp) { current_codepage = cp; set_ansi(cp); };
-function reset_cp() { set_cp(1200); reset_ansi(); }
+    var set_cp = function(cp) {current_codepage = cp; set_ansi(cp);};
+    function reset_cp() {set_cp(1200); reset_ansi();}
 
 function char_codes(data) { var o = []; for(var i = 0, len = data.length; i < len; ++i) o[i] = data.charCodeAt(i); return o; }
 
@@ -30217,37 +30217,44 @@ function readFileSync(filename, opts) {
 }
 function write_cfb_ctr(cfb, o) {
 	switch(o.type) {
-		case "base64": case "binary": break;
-		case "buffer": case "array": o.type = ""; break;
-		case "file": return write_dl(o.file, CFB.write(cfb, {type:has_buf ? 'buffer' : ""}));
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
-		default: throw new Error("Unrecognized type " + o.type);
-	}
-	return CFB.write(cfb, o);
-}
+    case "base64": case "binary": break;
+    case "buffer": case "array": o.type = ""; break;
+    case "file": return write_dl(o.file, CFB.write(cfb, {type:has_buf ? 'buffer' : ""}));
+    case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+    default: throw new Error("Unrecognized type " + o.type);
+  }
+    return CFB.write(cfb, o);
+  }
 
-function write_zip_type(wb, opts) {
-	var o = opts||{};
-	style_builder  = new StyleBuilder(opts);
-	var z = write_zip(wb, o);
-	var oopts = {};
-	if(o.compression) oopts.compression = 'DEFLATE';
-	if(o.password) oopts.type = has_buf ? "nodebuffer" : "string";
-	else switch(o.type) {
-		case "base64": oopts.type = "base64"; break;
-		case "binary": oopts.type = "string"; break;
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
-		case "buffer":
-		case "file": oopts.type = has_buf ? "nodebuffer" : "string"; break;
-		default: throw new Error("Unrecognized type " + o.type);
-	}
-	var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: {"nodebuffer": "buffer", "string": "binary"}[oopts.type] || oopts.type}) : z.generate(oopts);
-/*jshint -W083 */
-	if(o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
-/*jshint +W083 */
-	if(o.type === "file") return write_dl(o.file, out);
-	return o.type == "string" ? utf8read(out) : out;
-}
+    function write_zip_type(wb, opts) {
+    var o = opts || {};
+    var style_builder = new StyleBuilder(opts);
+    var z = write_zip(wb, o);
+    var oopts = {};
+    if (o.compression) oopts.compression = 'DEFLATE';
+    if (o.password) oopts.type = has_buf ? "nodebuffer" : "string";
+    else switch (o.type) {
+    case "base64":
+    oopts.type = "base64";
+    break;
+    case "binary":
+    oopts.type = "string";
+    break;
+    case "string":
+    throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+    case "buffer":
+    case "file":
+    oopts.type = has_buf ? "nodebuffer" : "string";
+    break;
+    default: throw new Error("Unrecognized type " + o.type);
+  }
+    var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: {"nodebuffer": "buffer", "string": "binary"}[oopts.type] || oopts.type}) : z.generate(oopts);
+    /*jshint -W083 */
+    if(o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
+    /*jshint +W083 */
+    if(o.type === "file") return write_dl(o.file, out);
+    return o.type == "string" ? utf8read(out) : out;
+  }
 
 function write_cfb_type(wb, opts) {
 	var o = opts||{};
@@ -30667,15 +30674,15 @@ var XmlNode = (function () {
 
   XmlNode.prototype.attr = function (attr, value) {
     if (value == undefined) {
-      delete this._attributes[attr];
-      return this;
-    }
+    delete this._attributes[attr];
+    return this;
+  }
     if (arguments.length == 0) {
-      return this._attributes;
-    }
+    return this._attributes;
+  }
     else if (typeof attr == 'string' && arguments.length == 1) {
-      return this._attributes.attr[attr];
-    }
+    return this._attributes.attr[attr];
+  }
     if (typeof attr == 'object' && arguments.length == 1) {
     for (var key in attr) {
     this._attributes[key] = attr[key];
@@ -30702,12 +30709,12 @@ var XmlNode = (function () {
     var xml = node._prefix;
     xml += '<' + node.tagName;
     if (node._attributes) {
-      for (var key in node._attributes) {
-        xml += ' ' + key + '=' + this.escapeAttributeValue(''+node._attributes[key]) + ''
-      }
-    }
+    for (var key in node._attributes) {
+    xml += ' ' + key + '=' + this.escapeAttributeValue(''+node._attributes[key]) + ''
+  }
+  }
     if (node._children && node._children.length > 0) {
-      xml += ">";
+    xml += ">";
       for (var i = 0; i < node._children.length; i++) {
         xml += this.toXml(node._children[i]);
       }
@@ -30757,36 +30764,37 @@ var StyleBuilder = function (options) {
     47: 'mmss.0',
     48: '##0.0E+0',
     49: '@',
-    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'    };
-  var fmt_table = {};
+    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'
+  };
+    var fmt_table = {};
 
-  for (var idx in table_fmt) {
+    for (var idx in table_fmt) {
     fmt_table[table_fmt[idx]] = idx;
   }
 
 
-  // cache style specs to avoid excessive duplication
-  _hashIndex = {};
-  _listIndex = [];
+    // cache style specs to avoid excessive duplication
+    var _hashIndex = {};
+    var _listIndex = [];
 
-  return {
+    return {
 
     initialize: function (options) {
 
-      this.$fonts = XmlNode('fonts').attr('count',0).attr("x14ac:knownFonts","1");
-      this.$fills = XmlNode('fills').attr('count',0);
-      this.$borders = XmlNode('borders').attr('count',0);
-      this.$numFmts = XmlNode('numFmts').attr('count',0);
-      this.$cellStyleXfs = XmlNode('cellStyleXfs');
-      this.$xf = XmlNode('xf')
-        .attr('numFmtId', 0)
-        .attr('fontId', 0)
-        .attr('fillId', 0)
-        .attr('borderId', 0);
+    this.$fonts = XmlNode('fonts').attr('count', 0).attr("x14ac:knownFonts", "1");
+    this.$fills = XmlNode('fills').attr('count', 0);
+    this.$borders = XmlNode('borders').attr('count', 0);
+    this.$numFmts = XmlNode('numFmts').attr('count', 0);
+    this.$cellStyleXfs = XmlNode('cellStyleXfs');
+    this.$xf = XmlNode('xf')
+    .attr('numFmtId', 0)
+    .attr('fontId', 0)
+    .attr('fillId', 0)
+    .attr('borderId', 0);
 
-      this.$cellXfs = XmlNode('cellXfs').attr('count',0);
-      this.$cellStyles = XmlNode('cellStyles')
-        .append(XmlNode('cellStyle')
+    this.$cellXfs = XmlNode('cellXfs').attr('count',0);
+    this.$cellStyles = XmlNode('cellStyles')
+    .append(XmlNode('cellStyle')
           .attr('name', 'Normal')
           .attr('xfId',0)
           .attr('builtinId',0)

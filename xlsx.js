@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.4';
+XLSX.version = '0.0.5';
 var current_codepage = 1200, current_ansi = 1252;
 /*global cptable:true, window */
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -21070,24 +21070,35 @@ function write_cfb_ctr(cfb, o) {
 }
 
 function write_zip_type(wb, opts) {
-	var o = opts||{};
-	style_builder  = new StyleBuilder(opts);
+	var o = opts || {};
+	var style_builder = new StyleBuilder(opts);
 	var z = write_zip(wb, o);
 	var oopts = {};
-	if(o.compression) oopts.compression = 'DEFLATE';
-	if(o.password) oopts.type = has_buf ? "nodebuffer" : "string";
-	else switch(o.type) {
-		case "base64": oopts.type = "base64"; break;
-		case "binary": oopts.type = "string"; break;
-		case "string": throw new Error("'string' output type invalid for '" + o.bookType + "' files");
+	if (o.compression) oopts.compression = 'DEFLATE';
+	if (o.password) oopts.type = has_buf ? "nodebuffer" : "string";
+	else switch (o.type) {
+		case "base64":
+			oopts.type = "base64";
+			break;
+		case "binary":
+			oopts.type = "string";
+			break;
+		case "string":
+			throw new Error("'string' output type invalid for '" + o.bookType + "' files");
 		case "buffer":
-		case "file": oopts.type = has_buf ? "nodebuffer" : "string"; break;
-		default: throw new Error("Unrecognized type " + o.type);
+		case "file":
+			oopts.type = has_buf ? "nodebuffer" : "string";
+			break;
+		default:
+			throw new Error("Unrecognized type " + o.type);
 	}
-	var out = z.FullPaths ? CFB.write(z, {fileType:"zip", type: {"nodebuffer": "buffer", "string": "binary"}[oopts.type] || oopts.type}) : z.generate(oopts);
-/*jshint -W083 */
-	if(o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
-/*jshint +W083 */
+	var out = z.FullPaths ? CFB.write(z, {
+		fileType: "zip",
+		type: {"nodebuffer": "buffer", "string": "binary"}[oopts.type] || oopts.type
+	}) : z.generate(oopts);
+	/*jshint -W083 */
+	if (o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
+	/*jshint +W083 */
 	if(o.type === "file") return write_dl(o.file, out);
 	return o.type == "string" ? utf8read(out) : out;
 }
@@ -21520,28 +21531,27 @@ var XmlNode = (function () {
       return this._attributes.attr[attr];
     }
     if (typeof attr == 'object' && arguments.length == 1) {
-      for (var key in attr) {
-        this._attributes[key] = attr[key];
-      }
-    }
-    else if (arguments.length == 2 && typeof attr == 'string') {
-      this._attributes[attr] = value;
-    }
-    return this;
-  }
+			for (var key in attr) {
+				this._attributes[key] = attr[key];
+			}
+		} else if (arguments.length == 2 && typeof attr == 'string') {
+			this._attributes[attr] = value;
+		}
+		return this;
+	}
 
 	var APOS = "'", QUOTE = '"'
 	var ESCAPED_QUOTE = {}
-  ESCAPED_QUOTE[QUOTE] = '&quot;'
-  ESCAPED_QUOTE[APOS] = '&apos;'
+	ESCAPED_QUOTE[QUOTE] = '&quot;'
+	ESCAPED_QUOTE[APOS] = '&apos;'
 
-  XmlNode.prototype.escapeAttributeValue = function(att_value) {
-    return '"' + att_value.replace(/\"/g,'&quot;') + '"';// TODO Extend with four other codes
+	XmlNode.prototype.escapeAttributeValue = function (att_value) {
+		return '"' + att_value.replace(/\"/g, '&quot;') + '"';// TODO Extend with four other codes
 
-  }
+	}
 
-  XmlNode.prototype.toXml = function (node) {
-    if (!node) node = this;
+	XmlNode.prototype.toXml = function (node) {
+		if (!node) node = this;
     var xml = node._prefix;
     xml += '<' + node.tagName;
     if (node._attributes) {
@@ -21590,46 +21600,47 @@ var StyleBuilder = function (options) {
     19: 'h:mm:ss AM/PM',
     20: 'h:mm',
     21: 'h:mm:ss',
-    22: 'm/d/yy h:mm',
-    37: '#,##0 ;(#,##0)',
-    38: '#,##0 ;[Red](#,##0)',
-    39: '#,##0.00;(#,##0.00)',
-    40: '#,##0.00;[Red](#,##0.00)',
-    45: 'mm:ss',
-    46: '[h]:mm:ss',
-    47: 'mmss.0',
-    48: '##0.0E+0',
-    49: '@',
-    56: '"上午/下午 "hh"時"mm"分"ss"秒 "'    };
-  var fmt_table = {};
+		22: 'm/d/yy h:mm',
+		37: '#,##0 ;(#,##0)',
+		38: '#,##0 ;[Red](#,##0)',
+		39: '#,##0.00;(#,##0.00)',
+		40: '#,##0.00;[Red](#,##0.00)',
+		45: 'mm:ss',
+		46: '[h]:mm:ss',
+		47: 'mmss.0',
+		48: '##0.0E+0',
+		49: '@',
+		56: '"上午/下午 "hh"時"mm"分"ss"秒 "'
+	};
+	var fmt_table = {};
 
-  for (var idx in table_fmt) {
-    fmt_table[table_fmt[idx]] = idx;
-  }
+	for (var idx in table_fmt) {
+		fmt_table[table_fmt[idx]] = idx;
+	}
 
 
-  // cache style specs to avoid excessive duplication
-  _hashIndex = {};
-  _listIndex = [];
+	// cache style specs to avoid excessive duplication
+	var _hashIndex = {};
+	var _listIndex = [];
 
-  return {
+	return {
 
-    initialize: function (options) {
+		initialize: function (options) {
 
-      this.$fonts = XmlNode('fonts').attr('count',0).attr("x14ac:knownFonts","1");
-      this.$fills = XmlNode('fills').attr('count',0);
-      this.$borders = XmlNode('borders').attr('count',0);
-      this.$numFmts = XmlNode('numFmts').attr('count',0);
-      this.$cellStyleXfs = XmlNode('cellStyleXfs');
-      this.$xf = XmlNode('xf')
-        .attr('numFmtId', 0)
-        .attr('fontId', 0)
-        .attr('fillId', 0)
-        .attr('borderId', 0);
+			this.$fonts = XmlNode('fonts').attr('count', 0).attr("x14ac:knownFonts", "1");
+			this.$fills = XmlNode('fills').attr('count', 0);
+			this.$borders = XmlNode('borders').attr('count', 0);
+			this.$numFmts = XmlNode('numFmts').attr('count', 0);
+			this.$cellStyleXfs = XmlNode('cellStyleXfs');
+			this.$xf = XmlNode('xf')
+				.attr('numFmtId', 0)
+				.attr('fontId', 0)
+				.attr('fillId', 0)
+				.attr('borderId', 0);
 
-      this.$cellXfs = XmlNode('cellXfs').attr('count',0);
-      this.$cellStyles = XmlNode('cellStyles')
-        .append(XmlNode('cellStyle')
+			this.$cellXfs = XmlNode('cellXfs').attr('count', 0);
+			this.$cellStyles = XmlNode('cellStyles')
+				.append(XmlNode('cellStyle')
           .attr('name', 'Normal')
           .attr('xfId',0)
           .attr('builtinId',0)
