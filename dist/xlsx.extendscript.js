@@ -9161,7 +9161,7 @@ module.exports = ZStream;
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-    XLSX.version = '0.0.3';
+    XLSX.version = '0.0.4';
     var current_codepage = 1200, current_ansi = 1252;
     /*global cptable:true, window */
     if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -9182,16 +9182,16 @@ function make_xlsx_lib(XLSX){
     128:   932, /* SHIFTJIS */
     129:   949, /* HANGUL */
     130:  1361, /* JOHAB */
-134:   936, /* GB2312 */
-136:   950, /* CHINESEBIG5 */
-161:  1253, /* GREEK */
-162:  1254, /* TURKISH */
-163:  1258, /* VIETNAMESE */
-177:  1255, /* HEBREW */
-178:  1256, /* ARABIC */
-186:  1257, /* BALTIC */
-204:  1251, /* RUSSIAN */
-222:   874, /* THAI */
+    134:   936, /* GB2312 */
+    136:   950, /* CHINESEBIG5 */
+    161:  1253, /* GREEK */
+    162:  1254, /* TURKISH */
+    163:  1258, /* VIETNAMESE */
+    177:  1255, /* HEBREW */
+    178:  1256, /* ARABIC */
+    186:  1257, /* BALTIC */
+    204:  1251, /* RUSSIAN */
+    222:   874, /* THAI */
 238:  1250, /* EASTEUROPE */
 255:  1252, /* OEM */
 69:   6969  /* MISC */
@@ -30677,27 +30677,27 @@ var XmlNode = (function () {
       return this._attributes.attr[attr];
     }
     if (typeof attr == 'object' && arguments.length == 1) {
-      for (var key in attr) {
-        this._attributes[key] = attr[key];
-      }
-    }
+    for (var key in attr) {
+    this._attributes[key] = attr[key];
+  }
+  }
     else if (arguments.length == 2 && typeof attr == 'string') {
-      this._attributes[attr] = value;
-    }
+    this._attributes[attr] = value;
+  }
     return this;
   }
 
-  var APOS = "'"; QUOTE = '"'
-  var ESCAPED_QUOTE = {  }
-  ESCAPED_QUOTE[QUOTE] = '&quot;'
-  ESCAPED_QUOTE[APOS] = '&apos;'
+    var APOS = "'", QUOTE = '"'
+    var ESCAPED_QUOTE = {}
+    ESCAPED_QUOTE[QUOTE] = '&quot;'
+    ESCAPED_QUOTE[APOS] = '&apos;'
 
-  XmlNode.prototype.escapeAttributeValue = function(att_value) {
+    XmlNode.prototype.escapeAttributeValue = function(att_value) {
     return '"' + att_value.replace(/\"/g,'&quot;') + '"';// TODO Extend with four other codes
 
   }
 
-  XmlNode.prototype.toXml = function (node) {
+    XmlNode.prototype.toXml = function (node) {
     if (!node) node = this;
     var xml = node._prefix;
     xml += '<' + node.tagName;

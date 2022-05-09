@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.3';
+XLSX.version = '0.0.4';
 var current_codepage = 1200, current_ansi = 1252;
 /*global cptable:true, window */
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -21530,8 +21530,8 @@ var XmlNode = (function () {
     return this;
   }
 
-  var APOS = "'"; QUOTE = '"'
-  var ESCAPED_QUOTE = {  }
+	var APOS = "'", QUOTE = '"'
+	var ESCAPED_QUOTE = {}
   ESCAPED_QUOTE[QUOTE] = '&quot;'
   ESCAPED_QUOTE[APOS] = '&apos;'
 
