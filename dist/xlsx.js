@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.5';
+XLSX.version = '0.0.6';
 var current_codepage = 1200, current_ansi = 1252;
 /*global cptable:true, window */
 if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -21069,9 +21069,10 @@ function write_cfb_ctr(cfb, o) {
 	return CFB.write(cfb, o);
 }
 
+	var style_builder = undefined;
 function write_zip_type(wb, opts) {
 	var o = opts || {};
-	var style_builder = new StyleBuilder(opts);
+	style_builder = new StyleBuilder(opts);
 	var z = write_zip(wb, o);
 	var oopts = {};
 	if (o.compression) oopts.compression = 'DEFLATE';
@@ -21099,7 +21100,7 @@ function write_zip_type(wb, opts) {
 	/*jshint -W083 */
 	if (o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
 	/*jshint +W083 */
-	if(o.type === "file") return write_dl(o.file, out);
+	if (o.type === "file") return write_dl(o.file, out);
 	return o.type == "string" ? utf8read(out) : out;
 }
 
@@ -21521,16 +21522,15 @@ var XmlNode = (function () {
 
   XmlNode.prototype.attr = function (attr, value) {
     if (value == undefined) {
-      delete this._attributes[attr];
-      return this;
-    }
-    if (arguments.length == 0) {
-      return this._attributes;
-    }
-    else if (typeof attr == 'string' && arguments.length == 1) {
-      return this._attributes.attr[attr];
-    }
-    if (typeof attr == 'object' && arguments.length == 1) {
+			delete this._attributes[attr];
+			return this;
+		}
+		if (arguments.length == 0) {
+			return this._attributes;
+		} else if (typeof attr == 'string' && arguments.length == 1) {
+			return this._attributes.attr[attr];
+		}
+		if (typeof attr == 'object' && arguments.length == 1) {
 			for (var key in attr) {
 				this._attributes[key] = attr[key];
 			}
@@ -21552,16 +21552,16 @@ var XmlNode = (function () {
 
 	XmlNode.prototype.toXml = function (node) {
 		if (!node) node = this;
-    var xml = node._prefix;
-    xml += '<' + node.tagName;
-    if (node._attributes) {
-      for (var key in node._attributes) {
-        xml += ' ' + key + '=' + this.escapeAttributeValue(''+node._attributes[key]) + ''
-      }
-    }
-    if (node._children && node._children.length > 0) {
-      xml += ">";
-      for (var i = 0; i < node._children.length; i++) {
+		var xml = node._prefix;
+		xml += '<' + node.tagName;
+		if (node._attributes) {
+			for (var key in node._attributes) {
+				xml += ' ' + key + '=' + this.escapeAttributeValue('' + node._attributes[key]) + ''
+			}
+		}
+		if (node._children && node._children.length > 0) {
+			xml += ">";
+			for (var i = 0; i < node._children.length; i++) {
         xml += this.toXml(node._children[i]);
       }
       xml += '</' + node.tagName + '>';
@@ -21590,16 +21590,16 @@ var StyleBuilder = function (options) {
     9:  '0%',
     10: '0.00%',
     11: '0.00E+00',
-    12: '# ?/?',
-    13: '# ??/??',
-    14: 'm/d/yy',
-    15: 'd-mmm-yy',
-    16: 'd-mmm',
-    17: 'mmm-yy',
-    18: 'h:mm AM/PM',
-    19: 'h:mm:ss AM/PM',
-    20: 'h:mm',
-    21: 'h:mm:ss',
+		12: '# ?/?',
+		13: '# ??/??',
+		14: 'm/d/yy',
+		15: 'd-mmm-yy',
+		16: 'd-mmm',
+		17: 'mmm-yy',
+		18: 'h:mm AM/PM',
+		19: 'h:mm:ss AM/PM',
+		20: 'h:mm',
+		21: 'h:mm:ss',
 		22: 'm/d/yy h:mm',
 		37: '#,##0 ;(#,##0)',
 		38: '#,##0 ;[Red](#,##0)',
@@ -21641,15 +21641,15 @@ var StyleBuilder = function (options) {
 			this.$cellXfs = XmlNode('cellXfs').attr('count', 0);
 			this.$cellStyles = XmlNode('cellStyles')
 				.append(XmlNode('cellStyle')
-          .attr('name', 'Normal')
-          .attr('xfId',0)
-          .attr('builtinId',0)
-        );
-      this.$dxfs = XmlNode('dxfs').attr('count', "0");
-      this.$tableStyles = XmlNode('tableStyles')
-        .attr('count','0')
-        .attr('defaultTableStyle','TableStyleMedium9')
-        .attr('defaultPivotStyle','PivotStyleMedium4');
+					.attr('name', 'Normal')
+					.attr('xfId', 0)
+					.attr('builtinId', 0)
+				);
+			this.$dxfs = XmlNode('dxfs').attr('count', "0");
+			this.$tableStyles = XmlNode('tableStyles')
+				.attr('count', '0')
+				.attr('defaultTableStyle', 'TableStyleMedium9')
+				.attr('defaultPivotStyle', 'PivotStyleMedium4');
 
 
       this.$styles = XmlNode('styleSheet')

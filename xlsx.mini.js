@@ -4,7 +4,7 @@
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-XLSX.version = '0.0.5';
+XLSX.version = '0.0.6';
 var current_codepage = 1200, current_ansi = 1252;
 
 var VALID_ANSI = [ 874, 932, 936, 949, 950 ];
@@ -9983,9 +9983,10 @@ function write_cfb_ctr(cfb, o) {
 	return CFB.write(cfb, o);
 }
 
+	var style_builder = undefined;
 function write_zip_type(wb, opts) {
 	var o = opts || {};
-	var style_builder = new StyleBuilder(opts);
+	style_builder = new StyleBuilder(opts);
 	var z = write_zip(wb, o);
 	var oopts = {};
 	if (o.compression) oopts.compression = 'DEFLATE';
@@ -10013,7 +10014,7 @@ function write_zip_type(wb, opts) {
 	/*jshint -W083 */
 	if (o.password && typeof encrypt_agile !== 'undefined') return write_cfb_ctr(encrypt_agile(out, o.password), o); // eslint-disable-line no-undef
 	/*jshint +W083 */
-	if(o.type === "file") return write_dl(o.file, out);
+	if (o.type === "file") return write_dl(o.file, out);
 	return o.type == "string" ? utf8read(out) : out;
 }
 

@@ -9161,7 +9161,7 @@ module.exports = ZStream;
 /*global global, exports, module, require:false, process:false, Buffer:false, ArrayBuffer:false */
 var XLSX = {};
 function make_xlsx_lib(XLSX){
-    XLSX.version = '0.0.5';
+    XLSX.version = '0.0.6';
     var current_codepage = 1200, current_ansi = 1252;
     /*global cptable:true, window */
     if(typeof module !== "undefined" && typeof require !== 'undefined') {
@@ -9203,15 +9203,15 @@ function make_xlsx_lib(XLSX){
     var set_cp = function(cp) {current_codepage = cp; set_ansi(cp);};
     function reset_cp() {set_cp(1200); reset_ansi();}
 
-function char_codes(data) { var o = []; for(var i = 0, len = data.length; i < len; ++i) o[i] = data.charCodeAt(i); return o; }
+    function char_codes(data) {var o = []; for(var i = 0, len = data.length; i < len; ++i) o[i] = data.charCodeAt(i); return o;}
 
-function utf16leread(data) {
-	var o = [];
-	for(var i = 0; i < (data.length>>1); ++i) o[i] = String.fromCharCode(data.charCodeAt(2*i) + (data.charCodeAt(2*i+1)<<8));
-	return o.join("");
-}
-function utf16beread(data) {
-	var o = [];
+    function utf16leread(data) {
+    var o = [];
+    for(var i = 0; i < (data.length>>1); ++i) o[i] = String.fromCharCode(data.charCodeAt(2*i) + (data.charCodeAt(2*i+1)<<8));
+    return o.join("");
+  }
+    function utf16beread(data) {
+    var o = [];
 	for(var i = 0; i < (data.length>>1); ++i) o[i] = String.fromCharCode(data.charCodeAt(2*i+1) + (data.charCodeAt(2*i)<<8));
 	return o.join("");
 }
@@ -30207,16 +30207,16 @@ function readSync(data, opts) {
 		case 0x7B: if(n[1] === 0x5C && n[2] === 0x72 && n[3] === 0x74) return RTF.to_workbook(d, o); break;
 		case 0x0A: case 0x0D: case 0x20: return read_plaintext_raw(d, o);
 	}
-	if(DBF.versions.indexOf(n[0]) > -1 && n[2] <= 12 && n[3] <= 31) return DBF.to_workbook(d, o);
-	return read_prn(data, d, o, str);
-}
+    if(DBF.versions.indexOf(n[0]) > -1 && n[2] <= 12 && n[3] <= 31) return DBF.to_workbook(d, o);
+    return read_prn(data, d, o, str);
+  }
 
-function readFileSync(filename, opts) {
-	var o = opts||{}; o.type = 'file';
-	return readSync(filename, o);
-}
-function write_cfb_ctr(cfb, o) {
-	switch(o.type) {
+    function readFileSync(filename, opts) {
+    var o = opts||{}; o.type = 'file';
+    return readSync(filename, o);
+  }
+    function write_cfb_ctr(cfb, o) {
+    switch(o.type) {
     case "base64": case "binary": break;
     case "buffer": case "array": o.type = ""; break;
     case "file": return write_dl(o.file, CFB.write(cfb, {type:has_buf ? 'buffer' : ""}));
@@ -30226,9 +30226,10 @@ function write_cfb_ctr(cfb, o) {
     return CFB.write(cfb, o);
   }
 
+    var style_builder = undefined;
     function write_zip_type(wb, opts) {
     var o = opts || {};
-    var style_builder = new StyleBuilder(opts);
+    style_builder = new StyleBuilder(opts);
     var z = write_zip(wb, o);
     var oopts = {};
     if (o.compression) oopts.compression = 'DEFLATE';
@@ -30256,15 +30257,15 @@ function write_cfb_ctr(cfb, o) {
     return o.type == "string" ? utf8read(out) : out;
   }
 
-function write_cfb_type(wb, opts) {
-	var o = opts||{};
-	var cfb = write_xlscfb(wb, o);
-	return write_cfb_ctr(cfb, o);
-}
+    function write_cfb_type(wb, opts) {
+    var o = opts||{};
+    var cfb = write_xlscfb(wb, o);
+    return write_cfb_ctr(cfb, o);
+  }
 
-function write_string_type(out, opts, bom) {
-	if(!bom) bom = "";
-	var o = bom + out;
+    function write_string_type(out, opts, bom) {
+    if(!bom) bom = "";
+    var o = bom + out;
 	switch(opts.type) {
 		case "base64": return Base64.encode(utf8write(o));
 		case "binary": return utf8write(o);
@@ -30666,13 +30667,13 @@ var XmlNode = (function () {
     return this;
   }
 
-  XmlNode.prototype.prefix = function (prefix) {
-    if (arguments.length==0) { return this._prefix;}
+    XmlNode.prototype.prefix = function (prefix) {
+    if (arguments.length==0) {return this._prefix;}
     this._prefix = prefix;
     return this;
   }
 
-  XmlNode.prototype.attr = function (attr, value) {
+    XmlNode.prototype.attr = function (attr, value) {
     if (value == undefined) {
     delete this._attributes[attr];
     return this;
@@ -30715,14 +30716,14 @@ var XmlNode = (function () {
   }
     if (node._children && node._children.length > 0) {
     xml += ">";
-      for (var i = 0; i < node._children.length; i++) {
-        xml += this.toXml(node._children[i]);
-      }
-      xml += '</' + node.tagName + '>';
-    }
+    for (var i = 0; i < node._children.length; i++) {
+    xml += this.toXml(node._children[i]);
+  }
+    xml += '</' + node.tagName + '>';
+  }
     else {
-      xml += '/>';
-    }
+    xml += '/>';
+  }
     return xml;
   }
   return XmlNode;
@@ -30795,15 +30796,15 @@ var StyleBuilder = function (options) {
     this.$cellXfs = XmlNode('cellXfs').attr('count',0);
     this.$cellStyles = XmlNode('cellStyles')
     .append(XmlNode('cellStyle')
-          .attr('name', 'Normal')
-          .attr('xfId',0)
-          .attr('builtinId',0)
-        );
-      this.$dxfs = XmlNode('dxfs').attr('count', "0");
-      this.$tableStyles = XmlNode('tableStyles')
-        .attr('count','0')
-        .attr('defaultTableStyle','TableStyleMedium9')
-        .attr('defaultPivotStyle','PivotStyleMedium4');
+    .attr('name', 'Normal')
+    .attr('xfId',0)
+    .attr('builtinId',0)
+    );
+    this.$dxfs = XmlNode('dxfs').attr('count', "0");
+    this.$tableStyles = XmlNode('tableStyles')
+    .attr('count','0')
+    .attr('defaultTableStyle','TableStyleMedium9')
+    .attr('defaultPivotStyle','PivotStyleMedium4');
 
 
       this.$styles = XmlNode('styleSheet')
